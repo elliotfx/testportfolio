@@ -1,6 +1,8 @@
 import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
 
 const container = document.querySelector('main');
+const overlay = document.querySelector('.overlay');
+const hint = document.querySelector('.hint');
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(container.clientWidth, container.clientHeight);
@@ -175,10 +177,23 @@ function lockPointer() {
 
 function onPointerLockChange() {
   pointerLocked = document.pointerLockElement === renderer.domElement;
+  updatePointerUI();
 }
 
 function onPointerLockError() {
   console.warn('Pointer lock refusé');
+  updatePointerUI();
+}
+
+function updatePointerUI() {
+  if (!overlay || !hint) return;
+  if (pointerLocked) {
+    overlay.setAttribute('hidden', '');
+    hint.removeAttribute('aria-hidden');
+  } else {
+    overlay.removeAttribute('hidden');
+    hint.setAttribute('aria-hidden', 'true');
+  }
 }
 
 renderer.domElement.addEventListener('click', () => {
@@ -190,6 +205,13 @@ renderer.domElement.addEventListener('click', () => {
 renderer.domElement.addEventListener('mousemove', onPointerMove);
 document.addEventListener('pointerlockchange', onPointerLockChange);
 document.addEventListener('pointerlockerror', onPointerLockError);
+
+document.addEventListener('keydown', (event) => {
+  if (!pointerLocked && (event.code === 'Enter' || event.code === 'Space')) {
+    event.preventDefault();
+    lockPointer();
+  }
+});
 
 function handleKey(keyCode, isPressed) {
   switch (keyCode) {
@@ -214,12 +236,13 @@ function handleKey(keyCode, isPressed) {
   }
 }
 
-document.addEventListener('keydown', (event) => {
-  handleKey(event.code, true);
-});
-
 document.addEventListener('keyup', (event) => {
   handleKey(event.code, false);
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.repeat) return;
+  handleKey(event.code, true);
 });
 
 function updateMovement(delta) {
@@ -278,4 +301,5 @@ function animate() {
   renderer.render(scene, camera);
 }
 
+updatePointerUI();
 animate();

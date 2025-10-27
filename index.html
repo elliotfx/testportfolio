@@ -37,6 +37,37 @@
         height: 100%;
       }
 
+      .overlay {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        text-align: center;
+        background: rgba(7, 12, 20, 0.72);
+        color: #e2e8f0;
+        font-size: 1.1rem;
+        gap: 0.35rem;
+        letter-spacing: 0.01em;
+        transition: opacity 180ms ease;
+        z-index: 20;
+      }
+
+      .overlay p {
+        margin: 0;
+      }
+
+      .overlay[hidden] {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .overlay__secondary {
+        font-size: 0.9rem;
+        color: #cbd5f5;
+        opacity: 0.75;
+        margin: 0;
+      }
+
       .hint {
         position: absolute;
         left: 50%;
@@ -52,6 +83,13 @@
         font-size: 0.95rem;
         pointer-events: none;
         z-index: 10;
+        opacity: 1;
+        transition: opacity 180ms ease, transform 200ms ease;
+      }
+
+      .hint[aria-hidden='true'] {
+        opacity: 0;
+        transform: translate(-50%, 10px);
       }
 
       .hint kbd {
@@ -75,7 +113,11 @@
       <p>Maintenez le pointeur sur la scène et utilisez la souris pour regarder autour de vous.</p>
     </header>
     <main>
-      <div class="hint">
+      <div class="overlay" role="status">
+        <p>Cliquez pour entrer dans la scène 3D</p>
+        <p class="overlay__secondary">Échap pour quitter le mode souris verrouillée</p>
+      </div>
+      <div class="hint" aria-hidden="true">
         <span>Déplacements :</span>
         <kbd>Z</kbd>
         <kbd>Q</kbd>

@@ -6,6 +6,8 @@ Ce dépôt contient une page web minimaliste offrant un environnement 3D interac
 
 Il s'agit d'un site statique : ouvrez simplement `index.html` dans votre navigateur moderne préféré. Le chargement de la scène nécessite une connexion internet afin de récupérer Three.js depuis un CDN.
 
+Au chargement, cliquez dans la fenêtre (ou appuyez sur **Entrée** / **Espace**) pour verrouiller la souris et commencer à vous déplacer.
+
 ## Contrôles
 
 - **Z / Q / S / D** : avancer, aller à gauche, reculer, aller à droite
